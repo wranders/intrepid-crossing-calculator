@@ -70,7 +70,7 @@ GetConnection().then((connection => {
   GetLookupById(9).then(lookup => {
     console.log(JSON.stringify(lookup));
   });
-  });
+});
 
 
 var search = new SearchApi();
@@ -83,7 +83,6 @@ search.getSearch("Dominix", ["inventorytype"], "en-us", true).then(result => {
 
 async function lookupItemPrice(lookupItem: LookupItem): Promise<LookupResult> {
   try {
-
     var search = new SearchApi();
     var universe = new UniverseApi();
     let market = new MarketApi();
@@ -97,10 +96,10 @@ async function lookupItemPrice(lookupItem: LookupItem): Promise<LookupResult> {
     let type = (await universe.getUniverseTypesTypeId(lowestItemID)).body;
 
     let marketDetails = (await market.getMarketsRegionIdOrders(10000002, "buy", lowestItemID)).body;
-    let bestBuyPrice = Math.max(...marketDetails.map(det => det.price))
-    return new LookupResult(0, type.name, bestBuyPrice, lookupItem.quantity, lowestItemID);
+    let bestBuyPrice = Math.max(...marketDetails.map(det => det.price));
+    return new LookupResult(0, type.name, bestBuyPrice * .85, lookupItem.quantity, lowestItemID);
   }
-  catch(e) {
+  catch (e) {
     console.log(e);
   }
 }

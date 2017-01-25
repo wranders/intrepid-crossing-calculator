@@ -7450,7 +7450,6 @@ export class FittingsApi {
         let headerParams: any = this.extendObj({}, this.defaultHeaders);
         let formParams: any = {};
 
-
         // verify required parameter 'characterId' is not null or undefined
         if (characterId === null || characterId === undefined) {
             throw new Error('Required parameter characterId was null or undefined when calling getCharactersCharacterIdFittings.');

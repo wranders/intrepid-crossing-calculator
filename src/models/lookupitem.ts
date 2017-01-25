@@ -19,7 +19,7 @@ export class LookupItem {
   public Lookup: Lookup;  
 
   constructor(name: string, quantity: number) {
-    this.name = name;
+    this.name = name.trim();
     this.quantity = quantity;
   }
 }

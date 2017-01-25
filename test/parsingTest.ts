@@ -20,6 +20,7 @@ addParseLineTest('Liquid Ozone    197,473    Ice Product            78,989.20 m3
 addParseLineTest('Gneiss	31	Gneiss			155 m3', 'Gneiss', 31);
 addParseLineTest('Gneiss    31    Gneiss            155 m3', 'Gneiss', 31);
 addParseLineTest("1 x 'Augmented' Hammerhead", "'Augmented' Hammerhead", 1);
+addParseLineTest('Fusion M	100	Projectile Ammo	Charge', 'Fusion M', 100);
 
 let multiLineInventoryString = `Liquid Ozone    197,473    Ice Product            78,989.20 m3
 Oxygen Isotopes    50,071    Ice Product            5,007.10 m3

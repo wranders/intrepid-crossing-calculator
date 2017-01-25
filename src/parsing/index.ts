@@ -7,6 +7,7 @@ export class Parser {
     public static FittingsRegex = /^([\d\-A-Za-z' ]+?)(?:x)?(\d*)?$/i;
     public static FittingTitleRegex = /^\[(.*)$/i;
     public static IndustryRegex = /^(\d+)[\s]*x (.*)$/i;
+    public static ContractRegex = /^([\S ]+)\s([\d,]+).*$/i;
 
     public static parse(string: string): Array<LookupItem> {
         return string.split('\n')
@@ -29,6 +30,9 @@ export class Parser {
             line = line.trim().replace(/    /g, '\t');
             if (Parser.InventoryRegex.test(line)) {
                 let match = line.match(Parser.InventoryRegex);
+                return new LookupItem(match[1], Parser.stringToIntWithDefault(match[2], 1));
+            } else if (Parser.ContractRegex.test(line)) {
+                let match = line.match(Parser.ContractRegex);
                 return new LookupItem(match[1], Parser.stringToIntWithDefault(match[2], 1));
             } else if (Parser.IndustryRegex.test(line)) {
                 let match = line.match(Parser.IndustryRegex);

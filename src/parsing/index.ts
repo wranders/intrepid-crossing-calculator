@@ -15,7 +15,6 @@ export class Parser {
             if (line.trim() === '') {
                 return undefined;
             }
-            console.log(line);
             if (Parser.InventoryRegex.test(line)) {
                 let match = line.match(Parser.InventoryRegex);
                 return new LookupItem(match[1], Parser.stringToIntWithDefault(match[2], 1));

@@ -10,7 +10,11 @@
             "name": "Launch Program",
             "program": "${workspaceRoot}/dist/index.js",
             "cwd": "${workspaceRoot}/dist",
-            "sourceMaps": true
+            "sourceMaps": true,
+            "env": {
+                "PG_PORT_5432_TCP_ADDR": "localhost", 
+                "PG_PORT_5432_TCP_PORT": "5432"
+            }
         }
     ]
 }

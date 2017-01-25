@@ -1,30 +1,17 @@
+import { MarketApi, SearchApi, UniverseApi } from './esiclient';
 import 'reflect-metadata';
-import { Lookup } from './models/lookup';
 import { LookupItem, LookupResult } from './models';
+import { Lookup } from './models/lookup';
 import { Parser } from './parsing';
 import * as koa from 'koa';
 import * as Router from 'koa-router';
 import * as serve from 'koa-static';
+import { Connection, createConnection } from 'typeorm';
 
 var bodyParser = require('koa-bodyparser');
 
-import { createConnection } from "typeorm";
-
-import {
-  Categories2,
-  Client,
-  Datasource,
-  Datasource44,
-  Datasource45,
-  Datasource53,
-  Language2,
-  Order_type
-} from './esiclient';
-
 const app = new koa();
 const router = new Router();
-
-let client = new Client('https://esi.tech.ccp.is/latest');
 
 let dbConnection: Connection = null;
 
@@ -35,8 +22,8 @@ async function GetConnection() {
   return await createConnection({
     driver: {
       type: "postgres",
-      host: "localhost",
-      port: 5432,
+      host: process.env.PG_PORT_5432_TCP_ADDR,
+      port: process.env.PG_PORT_5432_TCP_PORT,
       username: "postgres",
       password: "password1",
       database: "irc"
@@ -83,17 +70,39 @@ GetConnection().then((connection => {
   GetLookupById(9).then(lookup => {
     console.log(JSON.stringify(lookup));
   });
+  });
+
+
+var search = new SearchApi();
+search.getSearch("Dominix", ["inventorytype"], "en-us", true).then(result => {
+  console.log(result);
+}).catch(err => {
+  console.log(err);
 });
 
 
-
 async function lookupItemPrice(lookupItem: LookupItem): Promise<LookupResult> {
-  let items = await client.get_search(lookupItem.name, [Categories2.Inventorytype], Language2.EnUs, true, Datasource45.Tranquility);
-  let lowestItemID = Math.min(...items.inventorytype);
-  let type = await client.get_universe_types_type_id(lowestItemID, Datasource53.Tranquility);
-  let marketDetails = await client.get_markets_region_id_orders(10000002, lowestItemID, Order_type.Buy, 1, Datasource44.Tranquility);
-  let bestBuyPrice = Math.max(...marketDetails.filter(det => det.is_buy_order).map(det => det.price))
-  return new LookupResult(0, type.type_name, bestBuyPrice, lookupItem.quantity, lowestItemID);
+  try {
+
+    var search = new SearchApi();
+    var universe = new UniverseApi();
+    let market = new MarketApi();
+    console.log(1);
+    var items = (await search.getSearch(lookupItem.name, ["inventorytype"], "en-us", true)).body;
+    if (items.inventorytype.length == 0) {
+      return new LookupResult(0, "", 0, 0, 0);
+    }
+    let lowestItemID = Math.min(...items.inventorytype);
+
+    let type = (await universe.getUniverseTypesTypeId(lowestItemID)).body;
+
+    let marketDetails = (await market.getMarketsRegionIdOrders(10000002, "buy", lowestItemID)).body;
+    let bestBuyPrice = Math.max(...marketDetails.map(det => det.price))
+    return new LookupResult(0, type.name, bestBuyPrice, lookupItem.quantity, lowestItemID);
+  }
+  catch(e) {
+    console.log(e);
+  }
 }
 
 router.post('/api/item/', async (ctx, next) => {
@@ -102,6 +111,7 @@ router.post('/api/item/', async (ctx, next) => {
   lookup.items = itemsToLookup;
   SaveLookup(lookup);
   let results = await Promise.all(itemsToLookup.map(async (item) => await lookupItemPrice(item)));
+  console.log("test");
   let id = 0;
   results.forEach(res => {
     res.id = ++id;

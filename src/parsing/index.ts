@@ -27,7 +27,7 @@ export class Parser {
             if (line.trim() === '' || line.endsWith(']')) {
                 return undefined;
             }
-            line = line.trim().replace(/    /g, '\t');
+            line = line.trim().replace(/    /g, '\t').replace(',','');
             if (Parser.InventoryRegex.test(line)) {
                 let match = line.match(Parser.InventoryRegex);
                 return new LookupItem(match[1], Parser.stringToIntWithDefault(match[2], 1));
@@ -64,6 +64,5 @@ export class Parser {
         catch (e) {
             return def;
         }
-
     }
 }

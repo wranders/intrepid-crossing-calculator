@@ -2,3 +2,30 @@
   resize: none;
   min-height: 80vh;
 }
+
+.item-output {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+} 
+
+.item-output-image {
+  width: 32px !important;
+  height: 32px !important;
+  margin-right: 4px !important;
+}
+
+.layer-extra-padding > .grommetux-layer__container {
+  padding: 48px 48px !important;
+}
+
+.rightalign {
+  text-align: right !important;
+  width:300px;
+}
+.floatleft {
+  float:left !important;
+}
+
+.floatright {
+  float:right !important;
+}

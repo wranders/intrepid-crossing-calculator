@@ -12,6 +12,7 @@ addParseLineTest('3 Tritanium', 'Tritanium', 3);
 addParseLineTest('3x Tritanium', 'Tritanium', 3);
 addParseLineTest('Tritanium x4', 'Tritanium', 4);
 addParseLineTest('Tritanium 5', 'Tritanium', 5);
+addParseLineTest('Tritanium 5,123,456', 'Tritanium', 5123456);
 addParseLineTest('7th Tier Overseer\'s Personal Effects', '7th Tier Overseer\'s Personal Effects', 1);
 addParseLineTest('Liquid Ozone	197,473	Ice Product			78,989.20 m3', 'Liquid Ozone', 197473);
 addParseLineTest('Liquid Ozone    197,473    Ice Product            78,989.20 m3', 'Liquid Ozone', 197473);

@@ -24,11 +24,11 @@ async function GetConnection() {
   dbConnection = await createConnection({
     driver: {
       type: "postgres",
-      host: process.env.PG_PORT_5432_TCP_ADDR,
-      port: process.env.PG_PORT_5432_TCP_PORT,
-      username: "postgres",
-      password: "password1",
-      database: "irc"
+      host: process.env.PG_PORT_5432_TCP_ADDR || "localhost",
+      port: process.env.PG_PORT_5432_TCP_PORT || 5432,
+      username: process.env.PG_USERNAME || "postgres",
+      password: process.env.PG_PASSWORD || "password1",
+      database: process.env.PG_DB || "irc"
     },
     entities: [
       LookupItem,
